@@ -215,13 +215,13 @@ Here is an incomplete example of a function that will sort pid order:
 ```
 static int sort_pid(const void *a, const void *b)
 {
-     struct proc *f = (struct proc *)a;
-     struct proc *s = (struct proc *)b;
+     ProcEntry *f = *(ProcEntry **)a;
+     ProcEntry *s = *(ProcEntry **)b;
      int rval = f->pid - s->pid;
      return rval;
 }
 
-qsort(procs, num_loaded, sizeof(struct proc), sort_pid);
+qsort(procs, num_loaded, sizeof(ProcEntry *), sort_pid);
 
 ```
 
@@ -231,18 +231,18 @@ Once you have loaded and sorted the process you should output the results. Failu
 Your program must output the information using the function defined below. You should copy the function below verbatim and use it in your submission!
 
 ```
-void print_proc(struct proc *pr)
+void PrintProcEntry(ProcEntry *entry)
 {
-     unsigned long int utime = pr->utime / sysconf(_SC_CLK_TCK);
-     unsigned long int stime = pr->stime / sysconf(_SC_CLK_TCK);
+     unsigned long int utime = entry->utime / sysconf(_SC_CLK_TCK);
+     unsigned long int stime = entry->stime / sysconf(_SC_CLK_TCK);
      fprintf(stdout, "pid:%d comm:%s state:%c utime:%lu stime:%lu processor:%d path:%s\n",
-             pr->pid,
-             pr->comm,
-             pr->state,
+             entry->pid,
+             entry->comm,
+             entry->state,
              utime,
              stime,
-             pr->proc,
-             pr->path);
+             entry->proc,
+             entry->path);
 }
 ```
 

@@ -1,0 +1,89 @@
+/*
+ * File: ProcEntry.h
+ * Author(s): Luke Hindman & Shane Panter
+ * Date: Sun 22 Nov 2020 11:29:02 AM PST
+ * Description: Definition of ProcEntry struct and declaration
+ *   of support functions used in the myps project.
+ */
+#ifndef __PROC_ENTRY_H
+#define __PROC_ENTRY_H
+
+struct proc_entry {
+     int pid;
+     char *comm;
+     char state;
+     unsigned long int utime;
+     unsigned long int stime;
+     int proc;
+     char *path;
+};
+typedef struct proc_entry ProcEntry;
+
+/* CreateProcEntry: Allocate a ProcEntry struct in the heap using malloc.
+ *    The command field (comm) and path field will be allocated on the heap 
+ *    using malloc with sufficient size to store the string data passed in 
+ *    as a parameter. Both comm and path will be initialized with a copy of 
+ *    the corresponding string parameters. The remaining fields will be assigned
+ *    directly from the corresponding parameters.
+ *
+ *  It is considered valid for the path parameter to be NULL. In that case, do 
+ *    not allocate memory or attempt to perform the string copy operation on path.
+ * 
+ *  If the comm parameter is NULL or if any of the calls to malloc fail, 
+ *    return NULL.
+ *   
+ * pid - The pid of every process
+ * comm - The filename of the executable
+ * state - The state of the process (Running, Sleeping, etc)
+ * utime - The amount of time that the process has been scheduled in user mode
+ * stime - The amount of time that the process has been schedule in kernel mode
+ * proc - The CPU number last executed on.
+ * path - The file path of the stat file that corresponds to this ProcEntry
+ * 
+ * returns - Pointer to ProcEntry allocated on the heap, NULL on error
+ */
+ProcEntry * CreateProcEntry(int pid, char *comm, char state, 
+                            unsigned long int utime, unsigned long int stime,
+                            int proc, char *path);
+
+
+
+/* CreateProcEntryFromFile: Allocate a ProcEntry struct in the heap 
+ *    using malloc and initialize the fields with data provided from
+ *    the specified statFile. The command field (comm) and path field 
+ *    will be allocated on the heap using malloc. 
+ * 
+ * The statFile parameter must reference a stat file, formatted as 
+ *    described in the /proc manpage entry. The statFile will be
+ *    opened and the required fields extract to properly initialize
+ *    the ProcEntry struct.
+ *
+ * If the statFile parameter is NULL or if the file does not exist, 
+ *    return NULL. 
+ * 
+ * If the statFile exists, but an error occurs while attempting to 
+ *    extract the field data because is not a properly formatted
+ *    stat file, return NULL.
+ *  
+ * returns - Pointer to ProcEntry allocated on the heap, NULL on error
+ */
+ProcEntry * CreateProcEntryFromFile(const char statFile[]);
+
+/* DestroyProcEntry: Release memory allocated by malloc in the
+ *    CreateProcEntry or CreateProcEntryFromFile functions.  
+ *    Does nothing if thisNode is NULL.
+ * 
+ * entry - Pointer to ProcEntry object to be freed.
+ */
+void DestroyProcEntry(ProcEntry * entry);
+
+/* PrintProcEntry: Write the fields of the specified ProcEntry
+ *    to stdout (console) using the exact format specified
+ *    in the project guide.
+ * 
+ * entry - Pointer to ProcEntry object to be displayed
+ */
+void PrintProcEntry(ProcEntry * entry);
+
+
+#endif /* __PROC_ENTRY_H */

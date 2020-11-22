@@ -6,6 +6,7 @@
 
 #define _GNU_SOURCE
 #include <stdio.h>
+#include "ProcEntry.h"
 
 
 int main (int argc, char * argv[]) {
