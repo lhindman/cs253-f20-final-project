@@ -11,7 +11,7 @@ CFLAGS = -Wall -Wextra -Wpointer-arith -Wstrict-prototypes -std=c99 -g
 
 # The build rule depends upon the myprog artifact existing.  If it does not, make
 #   will look for a rule to create it.
-build: myps
+build: myps mytests
 
 
 myps: myps.o ProcEntry.o
@@ -20,5 +20,11 @@ myps: myps.o ProcEntry.o
 memtest-myps: myps
 	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/null
 
+mytests: mytests.o ProcEntry.o
+        $(CC) $(CFLAGS) $^ -o $@ 
+
+memtest-mytests: mytests
+	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./mytests
+
 clean:
-	rm -f *.o *.d a.out mycat mygrep mysort mywc
+	rm -f *.o *.d a.out myps mytests
