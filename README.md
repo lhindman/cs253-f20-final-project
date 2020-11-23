@@ -23,12 +23,12 @@ As we learned when we studied processes, the kernel is responsible for creating 
 <img src="images/ls-proc.jpg" alt="ls /proc" width="900">
 
 
-In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  That this directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
+In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  This directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
 
 **Example: ls /proc/1**  
 <img src="images/ls-proc-1.jpg" alt="ls /proc/1" width="900">
 
-For this project we are particularly interested in the stat file located within each process. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
+For this project we are particularly interested in the stat file located within each process directory. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
 
 
 **Example: cat /proc/1/stat**  
