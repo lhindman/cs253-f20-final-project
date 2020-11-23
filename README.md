@@ -202,37 +202,41 @@ static int pidSort(const void *a, const void *b)
 
 The last step is to display the sorted items in the ProcEntry* array.  This is also where myps will implement the -z option to display only ProcEntry items that are in the zombie (Z) state. Use the following code, verbatim, to display column headers that align with the output of the PrintProcEntry() function provided above:
 ```
-fprintf(stdout,"%7s %5s %5s %5s %4s %-28s %-20s\n","PID","STATE","UTIME","STIME","PROC","CMD","STAT_FILE");
+fprintf(stdout,"%7s %5s %5s %5s %4s %-25s %-20s\n","PID","STATE","UTIME","STIME","PROC","CMD","STAT_FILE");
 ```
 
 **HINT:** Lab12, particularly mysort, will be an excellent reference for this part of the project.
 
-**TESTING:** Start with a few basic smoke tests to make sure the basics are working correctly. Please download and extract the test_proc_dir.tgz package into your project directory to complete this testing.
+**TESTING:** Start with a few basic smoke tests to make sure the basics are working correctly. Please extract the test_data.tgz package into your project directory to complete this testing. Then use the proc datasets provided in test_data to more fully test the functionality of your myps implementation.
+
+```
+tar -xzf test_data.tgz
+```
 
 **Test Sort By PID (-p)**
 ```
-./myps -d test_proc -p | head -5
-    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
-      1     S     0     1    0 (systemd)                 test_proc/1/stat    
-      2     S     0     0    0 (kthreadd)                test_proc/2/stat    
-      3     I     0     0    0 (rcu_gp)                  test_proc/3/stat    
-      4     I     0     0    0 (rcu_par_gp)              test_proc/4/stat  
+./myps -d test_data/test_proc -p | head -5
+    PID STATE UTIME STIME PROC CMD                       STAT_FILE           
+      1     S     0     1    0 (systemd)                 test_data/test_proc/1/stat
+      2     S     0     0    0 (kthreadd)                test_data/test_proc/2/stat
+      3     I     0     0    0 (rcu_gp)                  test_data/test_proc/3/stat
+      4     I     0     0    0 (rcu_par_gp)              test_data/test_proc/4/stat  
 ```
 **Test Sort By Command (-c)**
 ```
- ./myps -d  test_proc -c | head -5
-    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
-    885     S     0     0    1 ((sd-pam))                test_proc/885/stat  
-   2137     S     0     0    0 (GUsbEventThread)         test_proc/2137/stat 
-    646     S     0     0    1 (HangDetector)            test_proc/646/stat  
-    877     S     2     2    1 (InputThread)             test_proc/877/stat
+./myps -d test_data/test_proc -c | head -5
+    PID STATE UTIME STIME PROC CMD                       STAT_FILE           
+    885     S     0     0    1 ((sd-pam))                test_data/test_proc/885/stat
+   2137     S     0     0    0 (GUsbEventThread)         test_data/test_proc/2137/stat
+    646     S     0     0    1 (HangDetector)            test_data/test_proc/646/stat
+    877     S     2     2    1 (InputThread)             test_data/test_proc/877/stat 
 ```
 **Test Show Zombies (-z)**
 ```
-./myps -d test_proc -z 
-    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
-    127     Z     0     0    1 (scsi_tmf_0)              test_proc/127/stat  
-    128     Z     0     0    1 (scsi_eh_1)               test_proc/128/stat  
+./myps -d test_data/test_proc -z | head -5
+    PID STATE UTIME STIME PROC CMD                       STAT_FILE           
+    127     Z     0     0    1 (scsi_tmf_0)              test_data/test_proc/127/stat
+    128     Z     0     0    1 (scsi_eh_1)               test_data/test_proc/128/stat 
 ```
 **Check For Memory Errors**
 ```
@@ -254,26 +258,57 @@ valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/nul
 ==73278== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
-## Test Data
-We have compiled some test data for you to use.
+## Final Project Evaluation
+There are 120 points allocated to this project, the equivilant of four labs. The purpose of this project is to assess your mastery of the learning objectives described above. The following rubric will be used to evaluate project submissions
+### Rubric
+- Coding Style (15 points) - This score will reflect how closely you follow the [CS253 Style Guide](https://docs.google.com/document/d/1zKIpNfkiPpDHEvbx8XSkZbUEUlpt8rnZjkhCSvM-_3A/edit?usp=sharing) we've been using in the labs this semester.
+- Code Quality (15 points) - This score will reflect any compilation warnings, run-time warnings or errors as well as memory issues reported by valgrind.  At program exit, no heap memory should be in use as indicated in the valgrind output above.
+- Unit Testing (40 points) - This score will reflect how closely your implementation of the ProcEntry support function in ProcEntry.c follow the described behavior documented in ProcEntry.h It is highly recommended that you develop a number of unit tests in mytests.c to confirm that these functions behave as expected.
+- Integration Testing (50 points) - This score will check the output of your myps implementation to stdout against the expected output. The only output your program should generate on stdout will come from the supplied fprintf() header statement and the PrintProcEntry() function.  All other output, except the help/usage output, must be written to stderr or to a file.
 
-Download test_proc_dir.tgz and use the command tar xzf test_proc_dir.tgz to unzip and untar all the files.
+
+### Integration Testing
+
+**Compare output for pid sort of onyx test data to expected using diff**
+```
+./myps -d test_data/onyx_proc -p > myps-pid_sort.out
+diff myps-pid_sort.out test_data/onyx_proc_expected/myps-pid_sort.out
+<< No output means success! >>
+echo $?
+0
+```
+
+**Compare output for command sort of onyx test data to expected using diff**
+```
+./myps -d test_data/onyx_proc -c > myps-cmd_sort.out
+diff myps-cmd_sort.out test_data/onyx_proc_expected/myps-cmd_sort.out
+<< No output means success! >>
+echo $?
+0
+```
+
+**Compare output for zombie only listing of onyx test data to expected using diff**
+```
+./myps -d test_data/onyx_proc -z > myps-zombie_only.out
+diff myps-zombie_only.out test_data/onyx_proc_expected/myps-zombie_only.out
+<< No output means success! >>
+echo $?
+0
+```
+
+### Extra Credit Opportunity
+It is valid for the comm field in the stat file to contain spaces and paranthesis which means each of the following are valid comm values.
+- (helloworld)
+- (hello world)
+- (hello) (world)
+For 30 points extra credit, modify your implementation to successfully parse commands that contain spaces and paranthesis from the stat file. There are LOTS of different permutations for comm your code must handle them all! The test_proc dataset can be used to help with the testing.
 
 ```
-shane:Downloads$ tar xzf test_proc_dir.tgz
-shane:Downloads$ ls
-test_proc         test_proc_dir.tgz
+./myps -d test_data/test_proc -p > myps-pid_sort.out
+diff myps-pid_sort.out test_data/test_proc_expected/myps-pid_sort.out
+<< No output means success! >>
+echo $?
+0
 ```
 
-### Example Output
-Below are a few examples for what your output should look like. Both examples were generated from the test data provided. However only 10 entries are shown out of 500.
 
-You will need to update the paths below to match where you downloaded and untar’d the test data!
-
-#### -d switch
-```
-
-## Hints
-Run Valgrind often! Don’t wait until you have finished the program to check for leaks or errors
-When parsing the comm field be aware that 1.(helloworld) 2.(hello world) 3.(hello) (world) are all valid values for comm. So make sure your parsing code is robust! There are LOTS of different permutations for comm your code must handle them all!
-Leverage the test data we gave you or create your own!!
