@@ -215,28 +215,30 @@ tar -xzf test_data.tgz
 
 **Test Sort By PID (-p)**
 ```
-./myps -d test_data/test_proc -p | head -5
+./myps -d test_data/onyx_proc -p | head -5
     PID STATE UTIME STIME PROC CMD                       STAT_FILE           
-      1     S     0     1    0 (systemd)                 test_data/test_proc/1/stat
-      2     S     0     0    0 (kthreadd)                test_data/test_proc/2/stat
-      3     I     0     0    0 (rcu_gp)                  test_data/test_proc/3/stat
-      4     I     0     0    0 (rcu_par_gp)              test_data/test_proc/4/stat  
+      1     S     1     3   14 (systemd)                 test_data/onyx_proc/1/stat
+      2     S     0     0    8 (kthreadd)                test_data/onyx_proc/2/stat
+      4     S     0     0    0 (kworker/0:0H)            test_data/onyx_proc/4/stat
+      6     S     0     0    0 (ksoftirqd/0)             test_data/onyx_proc/6/stat 
 ```
 **Test Sort By Command (-c)**
 ```
-./myps -d test_data/test_proc -c | head -5
+./myps -d test_data/onyx_proc -c | head -5
     PID STATE UTIME STIME PROC CMD                       STAT_FILE           
-    885     S     0     0    1 ((sd-pam))                test_data/test_proc/885/stat
-   2137     S     0     0    0 (GUsbEventThread)         test_data/test_proc/2137/stat
-    646     S     0     0    1 (HangDetector)            test_data/test_proc/646/stat
-    877     S     2     2    1 (InputThread)             test_data/test_proc/877/stat 
+   1623     S     0     0   12 (NetworkManager)          test_data/onyx_proc/1623/stat
+  19089     S     0     0   26 (abrt-dbus)               test_data/onyx_proc/19089/stat
+   1539     S     0     0   15 (abrt-watch-log)          test_data/onyx_proc/1539/stat
+   1488     S     0     0   23 (abrtd)                   test_data/onyx_proc/1488/stat
 ```
 **Test Show Zombies (-z)**
 ```
-./myps -d test_data/test_proc -z | head -5
+./myps -d test_data/onyx_proc -z | head -5
     PID STATE UTIME STIME PROC CMD                       STAT_FILE           
-    127     Z     0     0    1 (scsi_tmf_0)              test_data/test_proc/127/stat
-    128     Z     0     0    1 (scsi_eh_1)               test_data/test_proc/128/stat 
+   1368     Z     0     0   37 (kworker/37:2)            test_data/onyx_proc/1368/stat
+   2159     Z     0     0    9 (nfsd)                    test_data/onyx_proc/2159/stat
+   2224     Z     0     0    7 (nfsd)                    test_data/onyx_proc/2224/stat
+  19068     Z     0     0   32 (kworker/32:0)            test_data/onyx_proc/19068/stat
 ```
 **Check For Memory Errors**
 ```
