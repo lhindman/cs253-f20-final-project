@@ -198,12 +198,56 @@ fprintf(stdout,"%7s %5s %5s %5s %4s %-28s %-20s\n","PID","STATE","UTIME","STIME"
 
 **HINT:** Lab12, particularly mysort, will be an excellent reference for this part of the project.
 
-**TESTING:**
+**TESTING:** Start with a few basic smoke tests to make sure the basics are working correctly. Please download and extract the test_proc_dir.tgz package into your project directory to complete this testing.
+
 
 ## Final output
 Once you have loaded and sorted the process you should output the results. Failure to use the specified output will significantly impact your grade!
 
-
+**Test Sort By PID (-p)**
+```
+./myps -d test_proc -p | head -5
+    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
+      1     S     0     1    0 (systemd)                 test_proc/1/stat    
+      2     S     0     0    0 (kthreadd)                test_proc/2/stat    
+      3     I     0     0    0 (rcu_gp)                  test_proc/3/stat    
+      4     I     0     0    0 (rcu_par_gp)              test_proc/4/stat  
+```
+**Test Sort By Command (-c)**
+```
+ ./myps -d  test_proc -c | head -5
+    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
+    885     S     0     0    1 ((sd-pam))                test_proc/885/stat  
+   2137     S     0     0    0 (GUsbEventThread)         test_proc/2137/stat 
+    646     S     0     0    1 (HangDetector)            test_proc/646/stat  
+    877     S     2     2    1 (InputThread)             test_proc/877/stat
+```
+**Test Show Zombies (-z)**
+```
+./myps -d test_proc -z 
+    PID STATE UTIME STIME PROC CMD                          STAT_FILE           
+    127     Z     0     0    1 (scsi_tmf_0)              test_proc/127/stat  
+    128     Z     0     0    1 (scsi_eh_1)               test_proc/128/stat  
+```
+**Check For Memory Errors***
+```
+make memtest-myps 
+valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/null
+==73278== Memcheck, a memory error detector
+==73278== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==73278== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==73278== Command: ./myps
+==73278== 
+==73278== 
+==73278== HEAP SUMMARY:
+==73278==     in use at exit: 0 bytes in 0 blocks
+==73278==   total heap usage: 1,763 allocs, 1,763 frees, 517,935 bytes allocated
+==73278== 
+==73278== All heap blocks were freed -- no leaks are possible
+==73278== 
+==73278== For lists of detected and suppressed errors, rerun with: -s
+==73278== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
 
 ## Test Data
 We have compiled some test data for you to use.
