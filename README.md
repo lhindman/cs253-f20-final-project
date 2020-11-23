@@ -225,7 +225,7 @@ fprintf(stdout,"%7s %5s %5s %5s %4s %-28s %-20s\n","PID","STATE","UTIME","STIME"
     127     Z     0     0    1 (scsi_tmf_0)              test_proc/127/stat  
     128     Z     0     0    1 (scsi_eh_1)               test_proc/128/stat  
 ```
-**Check For Memory Errors***
+**Check For Memory Errors**
 ```
 make memtest-myps 
 valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/null
