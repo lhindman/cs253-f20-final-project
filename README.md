@@ -172,7 +172,13 @@ Once the command line options have been processed, build an filtered array of di
 **TESTING:** The core testing here will be to ensure the correct set of directories is being matched by the filter.  This can be performed manually.  Once again, be sure to run these tests with valgrind to ensure no memory leaks creep into the codebase. For basic testing, using the **memtest-myps** rule in the provided makefile.
 
 ## Project Guide (part 3)
-Complete the myps implementation by dynamically creating an array of ProcEntry* items.  The number of items is determined by the number of dirents found in part 2. Iterate through the array of dirents, use string concatenation to build the full file path to the stat file located in each PID directory, then use it to create a new ProcEntry struct with the CreateProcEntryFromFile() function defined in part 1 and add it to the ProcEntry* array.
+Complete the myps implementation by dynamically creating an array of ProcEntry* items.  The number of items is determined by the number of dirents found in part 2. 
+
+```
+ProcEntry ** myprocs = (ProcEntry **) (malloc(sizeof(ProcEntry *) * n));
+```
+
+Iterate through the array of dirents created in part 2, use string concatenation to build the full file path to the stat file located in each PID directory, then use it to create a new ProcEntry struct with the CreateProcEntryFromFile() function defined in part 1 and add it to the ProcEntry* array.
 
 Use qsort() to order items in the ProcEntry* array. The following comparison function can be used to sort ProcEntry items by process id. The myps tool should sort by pid if the -p option is specified or if no sorting option is specified on the command line. You will need to implement a second comparison function to enable sorting by command (comm) as specified by the -c command line option.
 ```
