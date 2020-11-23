@@ -89,6 +89,7 @@ The man page on the /proc file system is huge so we have copied the section rele
 
 ## Project Guide (part 1)
 The myps tool will collect the following information on each process from the /proc file system and sort the data in a ProcEntry struct. 
+
     - pid - The pid of every process
     - comm - The filename of the executable
     - state - The state of the process (Running, Sleeping, etc)
