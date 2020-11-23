@@ -35,10 +35,8 @@ For this project we are particularly interested in the stat file located within 
 <img src="images/cat-proc-1-stat.jpg" alt="cat /proc/1/stat" width="900">
 
 
-### Man page: proc
-The /proc man page has detailed information about the /proc file system which you can read about. For this project we will only be loading 6 data points about every process on a system.  
-
-The man page on the /proc file system is huge so we have copied the section relevant to this lab here:
+### Working with stat files
+The man page for proc (**man 5 proc**) contains detailed information about the /proc file system. For this project we will only be loading 6 data points from the stat file every process on a system.  The man page on the /proc file system is huge so we have copied the section relevant to this project here:
 ```
  /proc/[pid]/stat
               Status information about the process.  This is used by ps(1).
@@ -92,6 +90,12 @@ The man page on the /proc file system is huge so we have copied the section rele
               (39) processor  %d  (since Linux 2.2.8)
                         CPU number last executed on.
 ```
+
+### In A Nutshell
+The myps tool navigates to each PID directory in /proc (or other specified directory), open the stat file, extract the required fields to build a ProcEntry struct. A pointer to this ProcEntry struct will be stored in an array of ProcEntry struct pointers.  Once all the PID directories have been processed and the associated ProcEntry structs have been created with pointers added to the array, the array will be sorted based upon user specified criteria and displayed in the console. 
+
+The code to output both the array column headers as well as displaying individual ProcEntry structs has been provided and must not be changed. A portion of the grade for this project will depend upon exact output matching.
+
 
 ## Project Guide (part 1)
 The myps tool will collect the following information on each process from the /proc file system and store the data in a ProcEntry struct. 
