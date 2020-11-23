@@ -1,7 +1,12 @@
 # CS253 Final Project: myps
+
+## Project Background
+The myps project is drawn from the pool of warmup projects used in the Operating Systems (CS453/CS452) course. These warmup projects are assigned to help students identify weak areas in their C programming skillset so they can quickly get up to speed before the first OS programming project. I chose this particular project because it aligns particularly well with the content we've covered over the last four weeks.  
+
 In this project you will write a simplified version of the ps command found on Linux/Unix based systems. The purpose of this command is to display the current processes on the system and some basic metadata including the process id number (PID) as well as the associated command (COMM/CMD). For your final project you will develop a simple program that loads information from the proc file system and displays it to the user with options provided to change the order that processes are displayed. For debugging/testing purposes an option will also be added to specify an alternate directory to load process data from.
 
-## Learning objectives
+### Learning objectives
+The myps project aligns with the following learning objectives
     - Demonstrate knowledge of dynamic memory allocation
     - Demonstrate knowledge of Create/Destroy design pattern
     - Demonstrate knowledge of file stream processing
@@ -10,26 +15,26 @@ In this project you will write a simplified version of the ps command found on L
     - Demonstrate good coding style by following provided Style Guide
     - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
 
-## Project Background
-As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures in a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard commandline tools. 
 
 ### Working with /proc file system
-```
-cd /proc
-ls
-```
+As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures with a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard command line tools. 
+
+**Example: ls /proc**
+<img src="images/ls-proc.jpg" alt="ls /proc" width="350">
+
+
 In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  That this directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
 
-```
-cd 1
-ls
-```
+**Example: ls /proc/1**
+<img src="images/ls-proc-1.jpg" alt="ls /proc/1" width="350">
+
 For this project we are particularly interested in the stat file located within each process. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
 
-```
-cat stat
-1 (systemd) S 0 1 1 0 -1 4194560 121396 20180319 149 12318 234 765 164412 91000 20 0 1 0 40 171683840 2025 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 1 0 0 32 0 0 0 0 0 0 0 0 0 0
-```
+
+**Example: cat /proc/1/stat**
+<img src="images/cat-proc-1-stat.jpg" alt="cat /proc/1/stat" width="350">
+
+
 ### Man page: proc
 The /proc man page has detailed information about the /proc file system which you can read about. For this project we will only be loading 6 data points about every process on a system.  
 
