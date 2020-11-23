@@ -302,8 +302,11 @@ echo $?
 It is valid for the comm field in the stat file to contain spaces and paranthesis which means each of the following are valid comm values.
 - (helloworld)
 - (hello world)
-- (hello) (world)
-For 30 points extra credit, modify your implementation to successfully parse commands that contain spaces and paranthesis from the stat file. There are LOTS of different permutations for comm your code must handle them all! The test_proc dataset can be used to help with the testing.
+- (hello) (world)  
+
+For 30 points extra credit, modify your implementation to successfully parse commands that contain spaces and paranthesis from the stat file. There are LOTS of different permutations for comm your code must handle them all! To receive this extra credit you must schedule a time to meet with me over zoom to present your solution before the last day of classes.
+
+The test_proc dataset can be used to help with the testing.
 
 ```
 ./myps -d test_data/test_proc -p > myps-pid_sort.out
