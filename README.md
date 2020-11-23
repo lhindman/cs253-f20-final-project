@@ -9,7 +9,7 @@ In this project you will write a simplified version of the ps command found on L
     - Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
     - Demonstrate good coding style by following provided Style Guide
     - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
-## Project Overview
+## Project Background
 As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures in a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard commandline tools. 
 
 ### Working with /proc file system
