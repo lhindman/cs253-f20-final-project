@@ -12,6 +12,7 @@ In this project you will write a simplified version of the ps command found on L
 ## Project Overview
 As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures in a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard commandline tools. 
 
+### Working with /proc file system
 ```
 cd /proc
 ls
@@ -28,7 +29,7 @@ For this project we are particularly interested in the stat file located within 
 cat stat
 1 (systemd) S 0 1 1 0 -1 4194560 121396 20180319 149 12318 234 765 164412 91000 20 0 1 0 40 171683840 2025 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 1 0 0 32 0 0 0 0 0 0 0 0 0 0
 ```
-
+### Man page: proc
 The /proc man page has detailed information about the /proc file system which you can read about. For this project we will only be loading 6 data points about every process on a system.  
 
 The man page on the /proc file system is huge so we have copied the section relevant to this lab here:
@@ -50,9 +51,7 @@ The man page on the /proc file system is huge so we have copied the section rele
 
               (2) comm  %s
                         The filename of the executable, in parentheses.
-                        Strings longer than TASK_COMM_LEN (16) characters
-                        (including the terminating null byte) are silently
-                        truncated.  This is visible whether or not the exe‐
+                        This is visible whether or not the exe‐
                         cutable is swapped out.
 
               (3) state  %c
@@ -88,9 +87,8 @@ The man page on the /proc file system is huge so we have copied the section rele
                         CPU number last executed on.
 ```
 
-## Defining the data structure
-The first thing we need to do is define a data structure to hold information about every process. You must collect the following information on each process from the /proc file system.
-
+## Project Guide (part 1)
+The myps tool will collect the following information on each process from the /proc file system and sort the data in a ProcEntry struct. 
     - pid - The pid of every process
     - comm - The filename of the executable
     - state - The state of the process (Running, Sleeping, etc)
@@ -98,21 +96,17 @@ The first thing we need to do is define a data structure to hold information abo
     - stime - The amount of time that the process has been schedule in kernel mode
     - processor - The CPU number last executed on.
 
-The following proc_entry struct is provided in ProcEntry.h
-```
-struct proc_entry {
-     int pid;
-     char *comm;
-     char state;
-     unsigned long int utime;
-     unsigned long int stime;
-     int proc;
-     char *path;
-};
-typedef struct proc_entry ProcEntry;
-```
-
 The only field that is extra is the char *path field. This field is use to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
+
+Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provide ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
+
+**HINT:** Lab10 will be a great reference for this portion of the project.  It demonstrates the Create/Destroy design pattern as well as how to read data from files and load it into a struct.  It isn't and exact match, but a solid understanding of the concepts presented in Lab10 will be incredibly helpful here.
+
+**TESTING:** Add test cases to mytests.c as you implement the functions declared in ProcEntry.h. As you write the tests, look for ways to exercise all the code in your functions.  It isn't practical to go for 100% code coverage,but 80 to 90% should be doable.  I will be running my own set of unit tests against your projects as part of the grading process so it would be a good idea to test the functions to ensure they handle expected and unexpected conditions as specified in the comments provided in ProcEntry.h
+
+
+
+
 
 Referring back to the arrays and user defined functions labs we can construct a function to allocate an array of struct proc to store our data in:
 
