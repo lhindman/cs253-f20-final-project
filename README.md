@@ -1,14 +1,15 @@
-# Final project
-
-For your final project you will develop a simple program that loads information from the proc file system and displays it to the user. On linux, a fully featured process explorer that you can play with is called htop, on windows you could use process explorer. Our small program will not be nearly as complete as htop or process explorer, but will still be very useful.
+# CS253 Final Project: myps
+In this project you will write a simplified version of the ps command found on Linux/Unix based systems. The purpose of this command is to display the current processes on the system and some basic metadata including the process id number (PID) as well as the associated command (COMM/CMD). For your final project you will develop a simple program that loads information from the proc file system and displays it to the user with options provided to change the order that processes are displayed. For debugging/testing purposes an option will also be added to specify an alternate directory to load process data from.
 
 ## Learning objectives
-    - Apply what you have learned in this course
-    - Explore processes on linux
-    - Use the GNU C Library documentation
-    - Use the getopt function from the GNU library and handle all required switches as defined in the Handling command line arguments section.
-    - Test your code using the provided test data
-## Overview
+    - Demonstrate knowledge of dynamic memory allocation
+    - Demonstrate knowledge of Create/Destroy design patter
+    - Demonstrate knowledge of file stream processing
+    - Demonstrate knowledge of file system navigation
+    - Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
+    - Demonstrate good coding style by following provided Style Guide
+    - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
+## Project Overview
 Processes on Linux can be accessed in the /proc directory. The man page has detailed information about the /proc file system which you can read about. For this lab we will only be loading 6 data points about every process on a system.  
 
 The man page on the /proc file system is huge so we have copied the section relevant to this lab here:
@@ -78,9 +79,9 @@ The first thing we need to do is define a data structure to hold information abo
     - stime - The amount of time that the process has been schedule in kernel mode
     - processor - The CPU number last executed on.
 
-Thus we will define the data structure in lab.h as follows:
+The following proc_entry struct is provided in ProcEntry.h
 ```
-struct proc {
+struct proc_entry {
      int pid;
      char *comm;
      char state;
@@ -89,6 +90,7 @@ struct proc {
      int proc;
      char *path;
 };
+typedef struct proc_entry ProcEntry;
 ```
 
 The only field that is extra is the char *path field. This field is use to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
