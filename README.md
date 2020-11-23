@@ -88,7 +88,7 @@ The man page on the /proc file system is huge so we have copied the section rele
 ```
 
 ## Project Guide (part 1)
-The myps tool will collect the following information on each process from the /proc file system and sort the data in a ProcEntry struct. 
+The myps tool will collect the following information on each process from the /proc file system and store the data in a ProcEntry struct. 
 
     - pid - The pid of every process
     - comm - The filename of the executable
@@ -105,8 +105,36 @@ Carefully study the provided ProcEntry.h file including both the provided ProcEn
 
 **TESTING:** Add test cases to mytests.c as you implement the functions declared in ProcEntry.h. As you write the tests, look for ways to exercise all the code in your functions.  It isn't practical to go for 100% code coverage,but 80 to 90% should be doable.  I will be running my own set of unit tests against your projects as part of the grading process so it would be a good idea to test the functions to ensure they handle expected and unexpected conditions as specified in the comments provided in ProcEntry.h
 
+When testing, be certain to check the test cases with valrind. The provided makefile includes a **memtest-mytests** rule to assist with this testing.
+```
+make memtest-mytests 
+valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./mytests
+==72756== Memcheck, a memory error detector
+==72756== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==72756== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==72756== Command: ./mytests
+==72756== 
+Create/Destroy Test passed
+CreateFromFile/Destroy Test passed
+            999     S     0     0    1 (gmain)                   test_proc/999/stat  
+CreateFromFile/Print/Destroy Test passed
+CreateFromFile NULL Test passed
+CreateProcEntryFromFile: No such file or directory
+CreateFromFile DoesNotExist Test passed
+CreateFromFile InvalidFormat Test passed
+==72756== 
+==72756== HEAP SUMMARY:
+==72756==     in use at exit: 0 bytes in 0 blocks
+==72756==   total heap usage: 16 allocs, 16 frees, 15,478 bytes allocated
+==72756== 
+==72756== All heap blocks were freed -- no leaks are possible
+==72756== 
+==72756== For lists of detected and suppressed errors, rerun with: -s
+==72756== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
 
-
+## Project Guide (part 2)
+Once the functions specified
 
 
 Referring back to the arrays and user defined functions labs we can construct a function to allocate an array of struct proc to store our data in:
