@@ -6,14 +6,15 @@ The myps project is drawn from the pool of warmup projects used in the Operating
 In this project you will write a simplified version of the ps command found on Linux/Unix based systems. The purpose of this command is to display the current processes on the system and some basic metadata including the process id number (PID) as well as the associated command (COMM/CMD). For your final project you will develop a simple program that loads information from the proc file system and displays it to the user with options provided to change the order that processes are displayed. For debugging/testing purposes an option will also be added to specify an alternate directory to load process data from.
 
 ### Learning objectives
-The myps project aligns with the following learning objectives
-    - Demonstrate knowledge of dynamic memory allocation
-    - Demonstrate knowledge of Create/Destroy design pattern
-    - Demonstrate knowledge of file stream processing
-    - Demonstrate knowledge of file system navigation
-    - Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
-    - Demonstrate good coding style by following provided Style Guide
-    - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
+The myps project aligns with the following learning objectives  
+
+- Demonstrate knowledge of dynamic memory allocation
+- Demonstrate knowledge of Create/Destroy design pattern
+- Demonstrate knowledge of file stream processing
+- Demonstrate knowledge of file system navigation
+- Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
+- Demonstrate good coding style by following provided Style Guide
+- Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
 
 
 ### Working with /proc file system
