@@ -3,14 +3,33 @@ In this project you will write a simplified version of the ps command found on L
 
 ## Learning objectives
     - Demonstrate knowledge of dynamic memory allocation
-    - Demonstrate knowledge of Create/Destroy design patter
+    - Demonstrate knowledge of Create/Destroy design pattern
     - Demonstrate knowledge of file stream processing
     - Demonstrate knowledge of file system navigation
     - Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
     - Demonstrate good coding style by following provided Style Guide
     - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
 ## Project Overview
-Processes on Linux can be accessed in the /proc directory. The man page has detailed information about the /proc file system which you can read about. For this lab we will only be loading 6 data points about every process on a system.  
+As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures in a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard commandline tools. 
+
+```
+cd /proc
+ls
+```
+In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  That this directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
+
+```
+cd 1
+ls
+```
+For this project we are particularly interested in the stat file located within each process. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
+
+```
+cat stat
+1 (systemd) S 0 1 1 0 -1 4194560 121396 20180319 149 12318 234 765 164412 91000 20 0 1 0 40 171683840 2025 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 1 0 0 32 0 0 0 0 0 0 0 0 0 0
+```
+
+The /proc man page has detailed information about the /proc file system which you can read about. For this project we will only be loading 6 data points about every process on a system.  
 
 The man page on the /proc file system is huge so we have copied the section relevant to this lab here:
 ```
