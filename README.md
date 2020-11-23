@@ -97,7 +97,7 @@ The myps tool navigates to each PID directory in /proc (or other specified direc
 The code to output both the array column headers as well as displaying individual ProcEntry structs has been provided and must not be changed. A portion of the grade for this project will depend upon exact output matching.
 
 
-## Project Guide (part 1)
+## Implementation Guide (part 1)
 The myps tool will collect the following information on each process from the /proc file system and store the data in a ProcEntry struct. 
 
     - pid - The pid of every process
@@ -109,7 +109,7 @@ The myps tool will collect the following information on each process from the /p
 
 The only field that is extra is the char *path field. This field is use to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
 
-Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provide ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
+Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provided ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
 
 You must use the function below to display the ProcEntry structs to stdout.  Please copy this function verbatim into ProcEntry.c
 ```
