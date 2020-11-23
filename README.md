@@ -20,19 +20,19 @@ The myps project aligns with the following learning objectives
 As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures with a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard command line tools. 
 
 **Example: ls /proc**  
-<img src="images/ls-proc.jpg" alt="ls /proc" width="800">
+<img src="images/ls-proc.jpg" alt="ls /proc" width="900">
 
 
 In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  That this directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
 
 **Example: ls /proc/1**  
-<img src="images/ls-proc-1.jpg" alt="ls /proc/1" width="800">
+<img src="images/ls-proc-1.jpg" alt="ls /proc/1" width="900">
 
 For this project we are particularly interested in the stat file located within each process. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
 
 
 **Example: cat /proc/1/stat**  
-<img src="images/cat-proc-1-stat.jpg" alt="cat /proc/1/stat" width="800">
+<img src="images/cat-proc-1-stat.jpg" alt="cat /proc/1/stat" width="900">
 
 
 ### Man page: proc
