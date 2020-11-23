@@ -200,10 +200,6 @@ fprintf(stdout,"%7s %5s %5s %5s %4s %-28s %-20s\n","PID","STATE","UTIME","STIME"
 
 **TESTING:** Start with a few basic smoke tests to make sure the basics are working correctly. Please download and extract the test_proc_dir.tgz package into your project directory to complete this testing.
 
-
-## Final output
-Once you have loaded and sorted the process you should output the results. Failure to use the specified output will significantly impact your grade!
-
 **Test Sort By PID (-p)**
 ```
 ./myps -d test_proc -p | head -5
@@ -267,33 +263,7 @@ You will need to update the paths below to match where you downloaded and untarâ
 
 #### -d switch
 ```
-shane|(master *%=):final$ ./mylab -d `pwd`/test_proc/
-pid:92 comm:kthrotld state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/92/stat
-pid:95 comm:irq/26-pciehp state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/95/stat
-pid:104 comm:irq/35-pciehp state:S utime:0 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/104/stat
-pid:132 comm:ipv6_addrconf state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/132/stat
-pid:300 comm:kworker/1:1H-kblockd state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/300/stat
-pid:763 comm:cleanup state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/763/stat
-pid:1058 comm:gdbus state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/1058/stat
-pid:1093 comm:gsd-wwan state:S utime:0 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/1093/stat
-pid:2872 comm:pool-org.gnome. state:S utime:5 stime:1 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/2872/stat
-pid:2875 comm:snapd state:S utime:1 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/2875/stat
-```
 
-#### -c switch with -d switch
-```
-shane|(master *%=):final$ ./mylab -d `pwd`/test_proc/ -c
-pid:763 comm:cleanup state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/763/stat
-pid:1058 comm:gdbus state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/1058/stat
-pid:1093 comm:gsd-wwan state:S utime:0 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/1093/stat
-pid:132 comm:ipv6_addrconf state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/132/stat
-pid:95 comm:irq/26-pciehp state:S utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/95/stat
-pid:104 comm:irq/35-pciehp state:S utime:0 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/104/stat
-pid:92 comm:kthrotld state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/92/stat
-pid:300 comm:kworker/1:1H-kblockd state:I utime:0 stime:0 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/300/stat
-pid:2872 comm:pool-org.gnome. state:S utime:5 stime:1 processor:1 path:/Users/shane/repos/c-devel/labs/final/test_proc/2872/stat
-pid:2875 comm:snapd state:S utime:1 stime:0 processor:0 path:/Users/shane/repos/c-devel/labs/final/test_proc/2875/stat
-```
 ## Hints
 Run Valgrind often! Donâ€™t wait until you have finished the program to check for leaks or errors
 When parsing the comm field be aware that 1.(helloworld) 2.(hello world) 3.(hello) (world) are all valid values for comm. So make sure your parsing code is robust! There are LOTS of different permutations for comm your code must handle them all!
