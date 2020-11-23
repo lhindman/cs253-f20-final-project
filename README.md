@@ -9,6 +9,7 @@ In this project you will write a simplified version of the ps command found on L
     - Demonstrate knowledge of fundamental C language components: structs, arrays and pointers
     - Demonstrate good coding style by following provided Style Guide
     - Demonstrate good coding quality by producing code that has been well tested and is free of memory errors/warnings.
+
 ## Project Background
 As we learned when we studied processes, the kernel is responsible for creating and managing processes within an operating system. On Linux, the kernel provides a window into its internal process structures in a virtual filesystem called /proc. This is mounted as a filesystem on Linux and can be navigated using the standard commandline tools. 
 
@@ -99,11 +100,29 @@ The myps tool will collect the following information on each process from the /p
 
 The only field that is extra is the char *path field. This field is use to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
 
-**TODO:** Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provide ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
+Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provide ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
+
+You must use the function below to display the ProcEntry structs to stdout.  Please copy this function verbatim into ProcEntry.c
+```
+void PrintProcEntry(ProcEntry *entry)
+{
+     unsigned long int utime = entry->utime / sysconf(_SC_CLK_TCK);
+     unsigned long int stime = entry->stime / sysconf(_SC_CLK_TCK);
+     fprintf(stdout, "%7d %5c %5lu %5lu %4d %-25s %-20s\n",
+             entry->pid,
+             entry->state,
+             utime,
+             stime,
+             entry->proc,
+             entry->comm,
+             entry->path);
+}
+```
+
 
 **HINT:** Lab10 will be a great reference for this portion of the project.  It demonstrates the Create/Destroy design pattern as well as how to read data from files and load it into a struct.  It isn't and exact match, but a solid understanding of the concepts presented in Lab10 will be incredibly helpful here.
 
-**TESTING:** Add test cases to mytests.c as you implement the functions declared in ProcEntry.h. As you write the tests, look for ways to exercise all the code in your functions.  It isn't practical to go for 100% code coverage,but 80 to 90% should be doable.  I will be running my own set of unit tests against your projects as part of the grading process so it would be a good idea to test the functions to ensure they handle expected and unexpected conditions as specified in the comments provided in ProcEntry.h
+**TESTING:** Add test cases to mytests.c as you implement the functions declared in ProcEntry.h. As you write the tests, look for ways to exercise all the code in your functions.  It isn't practical to go for 100% code coverage, but 80 to 90% should be doable.  I will be running my own set of unit tests against your projects as part of the grading process so it would be a good idea to test the functions to ensure they handle expected and unexpected conditions as specified in the comments provided in ProcEntry.h
 
 When testing, be certain to check the test cases with valrind. The provided makefile includes a **memtest-mytests** rule to assist with this testing.
 ```
@@ -134,161 +153,51 @@ CreateFromFile InvalidFormat Test passed
 ```
 
 ## Project Guide (part 2)
-Once the functions specified
-
-
-Referring back to the arrays and user defined functions labs we can construct a function to allocate an array of struct proc to store our data in:
-
+Begin the implementation of myps itself by writing the code to process the following command line options:
 ```
-struct proc* make_array(void)
-{
-     struct proc *rval = calloc(MAX_PROCESS,sizeof(struct proc));
-     if(rval == NULL){
-          fprintf(stderr,"calloc returned NULL! Out of memory!");
-          abort();
-     }
-     return rval;
-}
+Usage: ./myps [-d <path>] [-p] [-c] [-z] [-h]
+        -d <path> Directory containing proc entries (default: /proc)
+        -p        Display proc entries sorted by pid (default)
+        -c        Display proc entries sorted by command lexicographically
+        -z        Display ONLY proc entries in the zombie state 
+        -h        Display this help message
+ ```
+ 
+By default, myps should process the /proc directory, however the user may specify another directory with the -d option.  This will be incredibly useful for testing as the /proc file system changes quite frequently.  Stub out the -p, -c and -z options as they will be implemented in part 3.  
+ 
+Once the command line options have been processed, build an filtered array of dirent structs that contains only PID directories. A filter for PID directories will need to check if the dirent type is a directory and if the first character of the name is a number.  For debugging purpose, go ahead and write the directory entries to the console to confirm the corrent set of dirent is being processed.
+
+**HINT:** Lab11 will be a great reference for this part of the project as well as the manpage for readdir(). 
+
+**TESTING:** The core testing here will be to ensure the correct set of directories is being matched by the filter.  This can be performed manually.  Once again, be sure to run these tests with valgrind to ensure no memory leaks creep into the codebase. For basic testing, using the **memtest-myps** rule in the provided makefile.
+
+## Project Guide (part 3)
+Complete the myps implementation by dynamically creating an array of ProcEntry* items.  The number of items is determined by the number of dirents found in part 2. Iterate through the array of dirents, use string concatenation to build the full file path to the stat file located in each PID directory, then use it to create a new ProcEntry struct with the CreateProcEntryFromFile() function defined in part 1 and add it to the ProcEntry* array.
+
+Use qsort() to order items in the ProcEntry* array. The following comparison function can be used to sort ProcEntry items by process id. The myps tool should sort by pid if the -p option is specified or if no sorting option is specified on the command line. You will need to implement a second comparison function to enable sorting by command (comm) as specified by the -c command line option.
 ```
-
-Don’t forget to define a function to free all the memory that you allocate!
-
-```
-void destroy_array(struct proc *procs)
-{
-     if(procs == NULL) return;
-
-     for(int i =0;i<MAX_PROCESS;i++){
-       //TODO: Free all memory!
-     }
-     free(procs);
-}
-```
-
-## Loading information from /proc
-Once we have our data structure defined and we have made functions to create and destroy them (constructor/destructor) we need to make a function to iterate over every directory in the /proc directory, open and load the stat file. This step will be a bit tricky because as you will find out there are other files in the /proc directory that you don’t want to load. You will need to write some code to filter that out.
-
-We should use the gnu libc manual as a reference. The GNU documentation has examples on how to open and access files in a directory. We have reproduced the directory lister below for convenience.
-
-Accessing directories
-Directory Entry
-Directory Lister
-
-```
-#include <stdio.h>
-#include <sys/types.h>
-#include <dirent.h>
-
-int
-main (void)
-{
-  DIR *dp;
-  struct dirent *ep;
-
-  dp = opendir ("./");
-  if (dp != NULL)
-    {
-      while (ep = readdir (dp))
-        puts (ep->d_name);
-      (void) closedir (dp);
-    }
-  else
-    perror ("Couldn't open the directory");
-
-  return 0;
-}
-```
-
-## Handling command line arguments
-Your program must accept the following command line inputs with the specified behavior and use the getopt library.
-
-```
-./mylab -p When the user passes the -p switch your program will display the results in pid order to stdout and exit
-./mylab -c When the user passes the c switch your program will display the results in comm order (lexicographic order) to stdout and exit
-./mylab -z When the user passes the z switch your program will display the zombies to stdout and exit
-./mylab -d dir When the user passes the d switch your program will start parsing the dir instead of /proc. For example the command ./mylab -d $HOME/test -p will treat the directory $HOME/test as the /proc directory and show the results in pid order.
-./mylab When the user gives no command line arguments your program will default to the -p behavior.
-./mylab -h When the user passes the h switch your program will display a help message to stdout and then exit.
-```
-
-If the user does not specify the -d flag you will default to the /proc directory!
-
-Here is an incomplete example of using getopt in your program:
-
-```
-char *dir = "/proc";
-int pid_o = 0;
-int comm_o = 0;
-int zombies_o = 0;
-int c;
-
-while ((c = getopt(argc, argv, "pczd:")) != -1)
-    switch (c)
-    {
-    case 'p':
-          pid_o = 1;
-          break;
-    case 'c':
-          comm_o = 1;
-          break;
-    case 'z':
-          zombies_o = 1;
-          break;
-    case 'd':
-          dir = optarg;
-          break;
-    case '?':
-          if (optopt == 'd')
-              fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-          else if (isprint(optopt))
-              fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-          else
-              fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-          return 1;
-    default:
-          abort();
-    }
-
-```
-
-## Sorting
-You will need to sort your array of struct proc’s depending on what command line flag is set. There is no need to reinvent the wheel! The C standard library has an implementation of quick sort that you must use!
-
-Here is an incomplete example of a function that will sort pid order:
-
-```
-static int sort_pid(const void *a, const void *b)
+static int pidSort(const void *a, const void *b)
 {
      ProcEntry *f = *(ProcEntry **)a;
      ProcEntry *s = *(ProcEntry **)b;
      int rval = f->pid - s->pid;
      return rval;
 }
-
-qsort(procs, num_loaded, sizeof(ProcEntry *), sort_pid);
-
 ```
+
+The last step is to display the sorted items in the ProcEntry* array.  This is also where myps will implement the -z option to display only ProcEntry items that are in the zombie (Z) state. Use the following code, verbatim, to display column headers that align with the output of the PrintProcEntry() function provided above:
+```
+fprintf(stdout,"%7s %5s %5s %5s %4s %-28s %-20s\n","PID","STATE","UTIME","STIME","PROC","CMD","STAT_FILE");
+```
+
+**HINT:** Lab12, particularly mysort, will be an excellent reference for this part of the project.
+
+**TESTING:**
 
 ## Final output
 Once you have loaded and sorted the process you should output the results. Failure to use the specified output will significantly impact your grade!
 
-Your program must output the information using the function defined below. You should copy the function below verbatim and use it in your submission!
 
-```
-void PrintProcEntry(ProcEntry *entry)
-{
-     unsigned long int utime = entry->utime / sysconf(_SC_CLK_TCK);
-     unsigned long int stime = entry->stime / sysconf(_SC_CLK_TCK);
-     fprintf(stdout, "pid:%d comm:%s state:%c utime:%lu stime:%lu processor:%d path:%s\n",
-             entry->pid,
-             entry->comm,
-             entry->state,
-             utime,
-             stime,
-             entry->proc,
-             entry->path);
-}
-```
 
 ## Test Data
 We have compiled some test data for you to use.
