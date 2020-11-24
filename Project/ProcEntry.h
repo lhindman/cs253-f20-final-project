@@ -20,33 +20,11 @@ struct proc_entry {
 typedef struct proc_entry ProcEntry;
 
 /* CreateProcEntry: Allocate a ProcEntry struct in the heap using malloc.
- *    The command field (comm) and path field will be allocated on the heap 
- *    using malloc with sufficient size to store the string data passed in 
- *    as a parameter. Both comm and path will be initialized with a copy of 
- *    the corresponding string parameters. The remaining fields will be assigned
- *    directly from the corresponding parameters.
- *
- *  It is considered valid for the path parameter to be NULL. In that case, do 
- *    not allocate memory or attempt to perform the string copy operation on path.
- * 
- *  If the comm parameter is NULL or if any of the calls to malloc fail, 
- *    return NULL.
- *   
- * pid - The pid of every process
- * comm - The filename of the executable
- * state - The state of the process (Running, Sleeping, etc)
- * utime - The amount of time that the process has been scheduled in user mode
- * stime - The amount of time that the process has been schedule in kernel mode
- * proc - The CPU number last executed on.
- * path - The file path of the stat file that corresponds to this ProcEntry
+ *   All fields will be initialized to zero or NULL based upon data type.
  * 
  * returns - Pointer to ProcEntry allocated on the heap, NULL on error
  */
-ProcEntry * CreateProcEntry(int pid, char *comm, char state, 
-                            unsigned long int utime, unsigned long int stime,
-                            int proc, char *path);
-
-
+ProcEntry * CreateProcEntry(void);
 
 /* CreateProcEntryFromFile: Allocate a ProcEntry struct in the heap 
  *    using malloc and initialize the fields with data provided from

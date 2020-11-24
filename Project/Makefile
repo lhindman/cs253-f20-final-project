@@ -21,7 +21,7 @@ memtest-myps: myps
 	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/null
 
 mytests: mytests.o ProcEntry.o
-        $(CC) $(CFLAGS) $^ -o $@ 
+	$(CC) $(CFLAGS) $^ -o $@ 
 
 memtest-mytests: mytests
 	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./mytests
