@@ -24,12 +24,12 @@ As we learned when we studied processes, the kernel is responsible for creating 
 <img src="images/ls-proc.jpg" alt="ls /proc" width="900">
 
 
-In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that coorespond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  This directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
+In addition to details about device drivers, memory usage and various other metrics, the /proc directory contains numbered subdirectories that correspond to the process id (PID) of currently running processes.  Within each directory is data for that particular process.  This directory structure is highly volatile as the PID directories will appear and disappear as processes are created and terminated.
 
 **Example: ls /proc/1**  
 <img src="images/ls-proc-1.jpg" alt="ls /proc/1" width="900">
 
-For this project we are particularly interested in the stat file located within each process directory. It contains a single line of space delimited values that provide a variety of metrics for the corresponding process.
+For this project we are particularly interested in the stat file located within each process directory. It contains a single line of space-delimited values that provide a variety of metrics for the corresponding process.
 
 
 **Example: cat /proc/1/stat**  
@@ -37,7 +37,7 @@ For this project we are particularly interested in the stat file located within 
 
 
 ### Working with stat files
-The man page for proc (**man 5 proc**) contains detailed information about the /proc file system. For this project we will only be loading 6 data points from the stat file every process on a system.  The man page on the /proc file system is huge so we have copied the section relevant to this project here:
+The man page for proc (**man 5 proc**) contains detailed information about the /proc file system. For this project we will only be extracting 6 data points from the stat file. The man page on the /proc file system is huge so we have copied the section relevant to this project here:
 ```
  /proc/[pid]/stat
               Status information about the process.  This is used by ps(1).
@@ -93,7 +93,7 @@ The man page for proc (**man 5 proc**) contains detailed information about the /
 ```
 
 ### In A Nutshell
-The myps tool navigates to each PID directory in /proc (or other specified directory), open the stat file, extract the required fields to build a ProcEntry struct. A pointer to this ProcEntry struct will be stored in an array of ProcEntry struct pointers.  Once all the PID directories have been processed and the associated ProcEntry structs have been created with pointers added to the array, the array will be sorted based upon user specified criteria and displayed in the console. 
+The myps tool navigates to each PID directory in /proc (or other specified directory), opens the stat file, and extracts the required fields to build a ProcEntry struct. A pointer to this ProcEntry struct will be stored in an array of ProcEntry struct pointers.  Once all the PID directories have been processed and the associated ProcEntry structs have been created with pointers added to the array, the array will be sorted based upon user specified criteria and displayed in the console. 
 
 The code to output both the array column headers as well as displaying individual ProcEntry structs has been provided and must not be changed. A portion of the grade for this project will depend upon exact output matching.
 
@@ -105,10 +105,10 @@ The myps tool will collect the following information on each process from the /p
     - comm - The filename of the executable
     - state - The state of the process (Running, Sleeping, etc)
     - utime - The amount of time that the process has been scheduled in user mode
-    - stime - The amount of time that the process has been schedule in kernel mode
+    - stime - The amount of time that the process has been scheduled in kernel mode
     - processor - The CPU number last executed on.
 
-The only field that is extra is the char *path field. This field is use to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
+The only field that is extra is the char *path field. This field is used to store the file path to the stat file that you loaded. Normally this will be /proc/[pid]/stat unless the user uses the -d flag (described below) to load a different directory.
 
 Carefully study the provided ProcEntry.h file including both the provided ProcEntry struct and the documentation for each support function.  Each ProcEntry will represent a single process on the system. Implement the specified support functions in ProcEntry.c.  Do not modify the provided ProcEntry.h file as the provided struct definition and function declarations will be used to test this portion of your project.  
 
@@ -130,11 +130,11 @@ void PrintProcEntry(ProcEntry *entry)
 ```
 
 
-**HINT:** Lab10 will be a great reference for this portion of the project.  It demonstrates the Create/Destroy design pattern as well as how to read data from files and load it into a struct.  It isn't and exact match, but a solid understanding of the concepts presented in Lab10 will be incredibly helpful here.
+**HINT:** Lab10 will be a great reference for this portion of the project.  It demonstrates the Create/Destroy design pattern as well as how to read data from files and load it into a struct.  It isn't an exact match, but a solid understanding of the concepts presented in Lab10 will be incredibly helpful here.
 
 **TESTING:** Add test cases to mytests.c as you implement the functions declared in ProcEntry.h. As you write the tests, look for ways to exercise all the code in your functions.  It isn't practical to go for 100% code coverage, but 80 to 90% should be doable.  I will be running my own set of unit tests against your projects as part of the grading process so it would be a good idea to test the functions to ensure they handle expected and unexpected conditions as specified in the comments provided in ProcEntry.h
 
-When testing, be certain to check the test cases with valrind. The provided makefile includes a **memtest-mytests** rule to assist with this testing.
+When testing, be certain to check the test cases with valgrind. The provided makefile includes a **memtest-mytests** rule to assist with this testing.
 ```
 make memtest-mytests 
 valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./mytests
@@ -162,7 +162,7 @@ CreateFromFile InvalidFormat Test passed
 ==72756== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
-## Project Guide (part 2)
+## Implementation Guide (part 2)
 Begin the implementation of myps itself by writing the code to process the following command line options:
 ```
 Usage: ./myps [-d <path>] [-p] [-c] [-z] [-h]
@@ -175,13 +175,13 @@ Usage: ./myps [-d <path>] [-p] [-c] [-z] [-h]
  
 By default, myps should process the /proc directory, however the user may specify another directory with the -d option.  This will be incredibly useful for testing as the /proc file system changes quite frequently.  Stub out the -p, -c and -z options as they will be implemented in part 3.  
  
-Once the command line options have been processed, build an filtered array of dirent structs that contains only PID directories. A filter for PID directories will need to check if the dirent type is a directory and if the first character of the name is a number.  For debugging purpose, go ahead and write the directory entries to the console to confirm the corrent set of dirent is being processed.
+Once the command line options have been processed, build a filtered array of dirent structs that contains only PID directories. A filter for PID directories will need to check if the dirent type is a directory and if the first character of the name is a number.  For debugging purposes, go ahead and write the directory entries to the console to confirm the correct set of directories is being processed.
 
 **HINT:** Lab11 will be a great reference for this part of the project as well as the manpage for readdir(). 
 
-**TESTING:** The core testing here will be to ensure the correct set of directories is being matched by the filter.  This can be performed manually.  Once again, be sure to run these tests with valgrind to ensure no memory leaks creep into the codebase. For basic testing, using the **memtest-myps** rule in the provided makefile.
+**TESTING:** The core testing here will be to ensure the correct set of directories is being matched by the filter.  This can be performed manually.  Once again, be sure to run these tests with valgrind to ensure no memory leaks creep into the codebase. For basic testing, use the **memtest-myps** rule in the provided makefile.
 
-## Project Guide (part 3)
+## Implementation Guide (part 3)
 Complete the myps implementation by dynamically creating an array of ProcEntry* items.  The number of items is determined by the number of dirents found in part 2. 
 
 ```
@@ -266,7 +266,7 @@ There are 120 points allocated to this project, the equivilant of four labs. The
 ### Rubric
 - Coding Style (15 points) - This score will reflect how closely you follow the [CS253 Style Guide](https://docs.google.com/document/d/1zKIpNfkiPpDHEvbx8XSkZbUEUlpt8rnZjkhCSvM-_3A/edit?usp=sharing) we've been using in the labs this semester.
 - Code Quality (15 points) - This score will reflect any compilation warnings, run-time warnings or errors as well as memory issues reported by valgrind.  At program exit, no heap memory should be in use as indicated in the valgrind output above.
-- Unit Testing (40 points) - This score will reflect how closely your implementation of the ProcEntry support function in ProcEntry.c follow the described behavior documented in ProcEntry.h It is highly recommended that you develop a number of unit tests in mytests.c to confirm that these functions behave as expected.
+- Unit Testing (40 points) - This score will reflect how closely your implementation of the ProcEntry support functions in ProcEntry.c follow the described behavior documented in ProcEntry.h It is highly recommended that you develop a number of unit tests in mytests.c to confirm that these functions behave as expected.
 - Integration Testing (50 points) - This score will check the output of your myps implementation to stdout against the expected output. The only output your program should generate on stdout will come from the supplied fprintf() header statement and the PrintProcEntry() function.  All other output, except the help/usage output, must be written to stderr or to a file.
 
 
@@ -300,12 +300,12 @@ echo $?
 ```
 
 ### Extra Credit Opportunity
-It is valid for the comm field in the stat file to contain spaces and paranthesis which means each of the following are valid comm values.
+It is valid for the comm field in the stat file to contain spaces and parantheses which means each of the following are valid comm values.
 - (helloworld)
 - (hello world)
 - (hello) (world)  
 
-For 30 points extra credit, modify your implementation to successfully parse commands that contain spaces and paranthesis from the stat file. There are LOTS of different permutations for comm your code must handle them all! To receive this extra credit you must schedule a time to meet with me over zoom to present your solution before the last day of classes.
+For 30 points extra credit, modify your implementation to successfully parse commands that contain spaces and parantheses from the stat file. There are LOTS of different permutations for comm your code must handle them all! To receive this extra credit you must schedule a time to meet with me over zoom to present your solution before the last day of classes.
 
 The test_proc dataset can be used to help with the testing.
 
