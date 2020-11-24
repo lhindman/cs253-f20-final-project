@@ -264,10 +264,10 @@ valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./myps > /dev/nul
 ## Final Project Evaluation
 There are 120 points allocated to this project, the equivilant of four labs. The purpose of this project is to assess your mastery of the learning objectives described above. The following rubric will be used to evaluate project submissions
 ### Rubric
-- Coding Style (15 points) - This score will reflect how closely you follow the [CS253 Style Guide](https://docs.google.com/document/d/1zKIpNfkiPpDHEvbx8XSkZbUEUlpt8rnZjkhCSvM-_3A/edit?usp=sharing) we've been using in the labs this semester.
-- Code Quality (15 points) - This score will reflect any compilation warnings, run-time warnings or errors as well as memory issues reported by valgrind.  At program exit, no heap memory should be in use as indicated in the valgrind output above.
-- Unit Testing (40 points) - This score will reflect how closely your implementation of the ProcEntry support functions in ProcEntry.c follow the described behavior documented in ProcEntry.h It is highly recommended that you develop a number of unit tests in mytests.c to confirm that these functions behave as expected.
-- Integration Testing (50 points) - This score will check the output of your myps implementation to stdout against the expected output. The only output your program should generate on stdout will come from the supplied fprintf() header statement and the PrintProcEntry() function.  All other output, except the help/usage output, must be written to stderr or to a file.
+- **Coding Style (15 points)** - This score will reflect how closely you follow the [CS253 Style Guide](https://docs.google.com/document/d/1zKIpNfkiPpDHEvbx8XSkZbUEUlpt8rnZjkhCSvM-_3A/edit?usp=sharing) we've been using in the labs this semester.
+- **Code Quality (15 points)** - This score will reflect any compilation warnings, run-time warnings or errors as well as memory issues reported by valgrind.  At program exit, no heap memory should be in use as indicated in the valgrind output above.
+- **Unit Testing (40 points)** - This score will reflect how closely your implementation of the ProcEntry support functions in ProcEntry.c follow the described behavior documented in ProcEntry.h It is highly recommended that you develop a number of unit tests in mytests.c to confirm that these functions behave as expected.
+- **Integration Testing (50 points)** - This score will check the output of your myps implementation to stdout against the expected output. The only output your program should generate on stdout will come from the supplied fprintf() header statement and the PrintProcEntry() function.  All other output, except the help/usage output, must be written to stderr or to a file.
 
 
 ### Integration Testing
