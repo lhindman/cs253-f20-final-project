@@ -281,8 +281,8 @@ echo $?
 0
 ```
 
-**Compare output for command sort of onyx test data to expected using diff**
-NOTE: Due to duplicate command data and no requirement for secondary sorting of PIDs, we must strip unneeded fields and only focus on the commands themself in this validation test.
+**Compare output for command sort of onyx test data to expected using diff**  
+**NOTE:** Due to duplicate command data and no requirement for secondary sorting of PIDs, we must strip unneeded fields and only focus on the commands themself in this validation test.
 ```
 ./myps -d test_data/onyx_proc -c | awk '{print $6}'> myps-cmd_sort-stripped.out
 cat test_data/onyx_proc_expected/myps-cmd_sort.out | awk '{print $6}'> test_data/onyx_proc_expected/myps-cmd_sort-stripped.out
